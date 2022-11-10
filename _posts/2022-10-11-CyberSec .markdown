@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Cybersec Eschema"
+title:  "Cybersec Schema"
 date:   2022-11-01 13:00:40 +0200
 categories: cybersec
 ---
