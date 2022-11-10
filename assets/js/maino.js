@@ -421,4 +421,4 @@ window.onscroll = function() {
 }
 
 window.setTimeout(function () {invert(); invert(); }, 200);
-
+window.name = currentSettings;
