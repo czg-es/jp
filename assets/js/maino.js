@@ -32,6 +32,13 @@ if (!currentSettings) {
     current_accent = window.name.split(',')[1]
     current_textColor = window.name.split(',')[2]
     current_mode = window.name.split(',')[3]
+    
+    console.log(' 1st time RESULTING: ')
+    console.log (window.name)
+    console.log(currentSettings)
+    
+    
+    
 
 } else {
 
@@ -60,6 +67,10 @@ if (!currentSettings) {
         getComputedStyle(document.documentElement).getPropertyValue('--text'),
         current_mode]
         */
+    
+    console.log(' other time RESULTING: ')
+    console.log (window.name)
+    console.log(currentSettings)
 }
 
 /* setter funcs for dom elements ------------------------------------------------------------------------------------------------------ */
