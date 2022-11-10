@@ -420,5 +420,5 @@ window.onscroll = function() {
   prevScrollpos = currentScrollPos;
 }
 
-invert();
-invert();
+window.setTimeout(function () {invert(); invert(); }, 200);
+
