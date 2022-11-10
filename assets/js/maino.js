@@ -78,10 +78,10 @@ if (!currentSettings) {
     console.log (window.name)
     console.log(currentSettings)
     
-    /* FAIL SAFE*/
+    /* FAIL SAFE no action*/
     if(window.name.split(',')[0] == 'night'){
      console.log('IT HAPPENED');
-     refresh();
+     
     }
 
 }
