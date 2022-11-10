@@ -37,6 +37,12 @@ if (!currentSettings) {
     console.log (window.name)
     console.log(currentSettings)
     
+    window.name = [
+        getComputedStyle(document.documentElement).getPropertyValue('--bg'),
+        getComputedStyle(document.documentElement).getPropertyValue('--accent'),
+        getComputedStyle(document.documentElement).getPropertyValue('--text'),
+        current_mode]
+    
     
     
 
