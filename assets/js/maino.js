@@ -19,14 +19,14 @@ let currentSettings = window.name
 
 /* ------MAIN LOGIC LOOP----------------------------------------------------------------- */
 if (!currentSettings) {
-    //console.log('first time huh?')
+    console.log('first time huh?')
     current_mode = "night"
     setBg()
-    //console.log(currentSettings)
+    console.log(currentSettings)
     setAccent()
-    //console.log(currentSettings)
+    console.log(currentSettings)
     setTextColor()
-    //console.log(currentSettings)
+    console.log(currentSettings)
 
     current_bg = window.name.split(',')[0]
     current_accent = window.name.split(',')[1]
@@ -35,9 +35,9 @@ if (!currentSettings) {
 
 } else {
 
-    //console.log('hay currentSettings')
-    //console.log(currentSettings)
-    //console.log(window.name)
+    console.log('hay currentSettings / window.name')
+    console.log(currentSettings)
+    console.log(window.name)
 
     current_bg = window.name.split(',')[0]
     current_accent = window.name.split(',')[1]
@@ -66,7 +66,7 @@ function setBg(color) {
     bg = color
     window.name = [color, accent, text, current_mode]
     currentSettings = window.name
-    ////console.log(window.name)
+    console.log(window.name)
 }
 
 function setAccent(color) {
@@ -78,6 +78,7 @@ function setAccent(color) {
     accent = color
     window.name = [bg, color, text, current_mode]
     currentSettings = window.name
+    console.log(window.name)
 }
 
 function setTextColor(color) {
@@ -89,6 +90,7 @@ function setTextColor(color) {
     text = color
     window.name = [bg, accent, color, current_mode]
     currentSettings = window.name
+    console.log(window.name)
 }
 
 /* reloads the page but saving mode to window.name */
@@ -96,7 +98,8 @@ function refresh() {
     //console.log('--------------------------');
     //console.log(current_mode);
     //console.log('----------------');
-    window.name = ",,," + current_mode;
+        //window.name = ",,," + current_mode;
+    window.name = [bg, accent, color, current_mode]
     window.location.reload();
     //se('hero_wrapper');
 }
