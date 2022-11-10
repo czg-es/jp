@@ -1,0 +1,57 @@
+---
+layout: default
+---
+
+<!-- This loops through the paginated posts -->
+{% for post in paginator.posts %}
+<div class="c_preview hidden" id="c_preview" >
+  <h1 class = "preview_link" id = "preview_link" ><a href="{{ post.url | prepend: site.baseurl }}" >{{ post.title }}</a></h1>
+  <p class="author">
+    <span class="date">{{ post.date | date_to_string }}</span>
+  </p>
+  <div class="content">
+
+    {% if post.content contains '<!--excerpt.start-->' and post.content contains '<!--excerpt.end-->' %}
+	      {{ post.content | split:'<!--excerpt.start-->' | last| split: '<!--excerpt.end-->' | first}}  <a href="{{ post.url | prepend: site.baseurl }}">Read more...</a> 
+    {% else %}
+	      {{ post.content  }} <a href="{{ post.url | prepend: site.baseurl }}">Read more...</a>
+    {% endif %}  
+
+   
+
+  </div>
+</div>
+<!-- <div class="spacer layer1">{%- include peaks2.svg -%}</div> -->
+<div class="spacer layer1">{%- include null.svg -%}</div>
+
+{% endfor %}
+
+<!-- Pagination links -->
+<hr>
+<div class="pagination">
+    {% if paginator.total_pages > 1 %}
+    <div class="pagination">
+      {% if paginator.previous_page %}
+        <a href="{{ paginator.previous_page_path | relative_url }}">&laquo; Prev</a>
+      {% else %}
+        <span> &laquo; Prev &nbsp; &nbsp;</span>
+      {% endif %}
+    
+      {% for page in (1..paginator.total_pages) %}
+        {% if page == paginator.page %}
+          <em>&nbsp;{{ page }}&nbsp;</em>
+        {% elsif page == 1 %}
+          <a href="{{ '/' | relative_url }}">&nbsp;{{ page }}&nbsp;</a>
+        {% else %}
+          <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}">&nbsp;{{ page }}</a>
+        {% endif %}
+      {% endfor %}
+    
+      {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path | relative_url }}">&nbsp; &nbsp; Next &raquo;</a>
+      {% else %}
+        <span>&nbsp; &nbsp; Next &raquo;</span>
+      {% endif %}
+    </div>
+    {% endif %}
+</div>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {%- include head.html -%}
+
+  <body>
+    
+    {%- if paginator.page == 1 %}
+      <!-- <a href="#home_button" class="hero_wrapper texture"> -->
+        <a href="#home_button" class="hero_wrapper" title="scroll to main content">
+          {%- include C_roundCCC.svg -%}
+      </a>
+    {% else %}
+      <!-- <div class="head_card texture"> -->
+        <div class="head_card">
+        <div class="logo_wrapper">
+          {%- include initials_2.svg -%}
+        
+        </div>
+     </div>
+    {%- endif %}
+    
+    {%- include header.html -%}
+    
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        
+        {{ content }}
+      </div>
+    </main>
+
+    {%- include footer.html -%}
+    </div>
+  </body>
+
+</html>

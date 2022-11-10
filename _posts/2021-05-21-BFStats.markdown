@@ -1,0 +1,11 @@
+---
+layout: default_custom
+title:  "Battlefield weapon stats comparator"
+date:   2021-05-20 22:25:42 +0200
+categories: data_manipulation data_visualization javascript
+frame_url: https://czg-es.github.io/BF_Stats/
+---
+{%- include frame.html -%}
+
+Un projecto con Javascript , html y css.<br>
+Comparaci&oacute;n de estad&iacute;sticas de los juegos de Dice Battlefield 1 y 5.

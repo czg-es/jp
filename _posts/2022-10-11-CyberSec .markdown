@@ -1,0 +1,827 @@
+---
+layout: post
+title:  "Cybersec Eschema"
+date:   2022-11-01 13:00:40 +0200
+categories: cybersec
+---
+I recently took the ech cyber secrity essentials course, noticed how neatly organized and structured the contents were.
+
+while taking notes I though: wouldn't it be nice to have some program that feeds from an indented list (like the table of contents from my notes) and generate an structure of nested DOM elelments to represent in a web page an navigate into the diferent levels?
+
+So, thats what I did, I created a python script that reads a multiline string and calculate the level of nesting based on the spaces found at the begining of the line.<br>
+```python
+data= """1.INFORMATION SECURITY
+    DEFINITION
+    NEED FOR SECURITY
+    INFOSEC ELEMENTS
+    CHALLENGES
+    MOTIVATIONS
+    ATTACKS CLASIFICATION
+    ATTACK VECTORS
+    ATTACK TYPES
+    LAWS AND REGULATIONS
+2.ETHICAL HACKING
+    CIBER KILL CHAIN METHODOLOGY
+    INDICATORS OF COMPROMISE (IOC)
+    HACKING CONCEPTS AND CLASSES
+    HACKING PHASES
+        RECONOCIMIENTO
+        SCANNING
+        GAINING ACCESS
+        MAINTAINING ACCESS
+        CLEARING TRACKS
+    SCOPE AND LIMITATIONS OF ETHICAL HACKING
+    TOOLS"""
+```
+```python
+allLines = data.splitlines()
+
+menu = []
+
+for index, line in enumerate( allLines ):
+    tabs = 4    # mistery adjustment
+    for i in line:
+        tabs +=1
+        if i != " ": break
+    linea = {"posicion": index+1,"texto":line.strip(), "nivel":round(tabs/4)}
+    menu.append(linea)
+```
+
+This gets us a list, each element has the position (line number), the text and the indentation level.
+Now we have to iterate through this list generating the html elements.
+
+```python
+
+def calculate(data):
+    currentdepth = 0
+    output = ''
+    for index, value in enumerate(data) :
+        #position = value['posicion']
+        text = value['texto']
+        level = value['nivel']
+
+        try:
+            next = data[index +1]['nivel']
+        except:
+            next = 0
+        
+        while level > currentdepth:
+            output += '<ul>\n'
+            currentdepth +=1
+        while level < currentdepth:
+            output += '</ul>\n'
+            currentdepth -=1
+        
+        if level < next:
+            output += '    <!-- next item is node -->\n'
+            output += f'<li class = "node" onclick="placeholder(this)">{text}</li>\n'
+        else:
+            output += f'<li>{text}</li>\n'
+        
+    output += currentdepth * '</ul><!-- level left -->\n'
+
+    return output
+
+```
+
+We start with a depth of 0, for each line we compare the level with the depth we are at:
+- if its higher we open an element (ul in this case) 
+- if its lower we close the element.
+in both cases we update the depth we are at.
+
+Since this its done in a while loop , it´ll happen as many times as necesary to even the depth.
+This means that it could handle level jumps, However, this could generate empty levels wich is a problem for this particular use case( html elements).
+
+The most beautiful part happens in the beggining, in the try clause we take a "peek into the future" checking if the next line has a higher or lower level.
+This is because I wanted to be able to unfold the sections, so every "node" gets asigned function that will take care of the visibility of its child.(this is the part where having empty levels could mess the operation)
+if the try clause fails the next level is asigned as 0, because, when is it going to fail to look one line ahead? yeah, you guessed it, in the last position of the list.
+
+So, wouldn't it be nice to develop such a thing? the answer is : Yes totally !!
+
+<!--excerpt.start-->
+<style>
+        :root {
+             /* --bg_color: #494d5f; */
+             --bg_color: var(--bg);
+             --text: var(--text);
+
+}
+        body{
+            background: var(--bg_color);
+            color: var(--text);
+            /* font-family: 'Poppins', sans-serif; */
+            font-family: 'Montserrat', sans-serif;
+            /* font-family: 'Ubuntu', sans-serif; */
+            /* font-weight: 900; */
+        }
+/*         ul{
+            border: 2px solid blanchedalmond;
+            border-radius: 10px;
+            padding: 2rem;
+        }
+        ul>li{
+            padding-left: 2rem;
+        }
+        */     
+        menu{
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            /* background: #00000049; */
+        }
+        .node{
+            padding: 1rem;
+            border: 2px solid #ffffff6d;
+            border-radius: 10px;
+            cursor: pointer;
+            -webkit-user-select: none; /* Safari 3.1+ */
+            -moz-user-select: none; /* Firefox 2+ */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none;
+            transform: rotate(0deg);   
+            transition: transform 1s;
+        }
+        .node::before {
+            content: "\25B6";
+            color: #ffffff32;
+            display: inline-block;
+            margin-right: 6px;
+            }
+
+        menu > ul{
+            list-style:none;
+        }
+
+        ul > ul{
+            display: none;
+            transform:scaleY(0.1);
+            transition: transform 1s;
+        }
+
+        .active {
+            /* background: #00800068 !important; */
+            background: #00000087 !important;
+            color: whitesmoke;
+            padding: 1.1rem;
+            /* font-size: larger; */
+            box-shadow: 1px 5px 10px var(--shadow);
+            transform: rotate(1deg);   
+            transition: transform 1s;
+            border: 2px solid var(--accent);
+        }
+
+
+
+        
+        li:nth-child(odd){
+            background: #00000024;
+
+
+        }
+        ul{
+            padding:0.5rem;
+            /* transform: translateX(-20px); */
+        }
+
+        .red{
+            background: #00000031;
+            display:  block;
+            border-radius: 5% 0px 10% 5%;
+            overflow:hidden ;
+            transform: scaleY(1);
+            transition: transform 30s;
+                        
+                       
+        }
+        li{
+            margin-bottom: .1rem;
+
+        }
+        
+
+        .caret-down::before {
+            -ms-transform: rotate(90deg); /* IE 9 */
+            -webkit-transform: rotate(90deg); /* Safari */
+            transform: rotate(90deg);  
+            color: #ffffff32;
+            }
+        .red>li{
+            padding: .5rem;
+        }
+        /* SCROLLBAR-------------------------- */
+        /* width */
+        ::-webkit-scrollbar { width: 10px; }
+
+        /* Track */
+        ::-webkit-scrollbar-track { background: #00000035; }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb { background: #ffffff3a; }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover { background: #ffffff3e; }
+
+        
+/* hotpink  darkmagenta darkred darkslateblue dimgrey indianred maroon mediumslategrey olivedrab darkolivegreen */
+    </style>
+
+<body>
+<hr>
+<menu>
+    <ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">1.INFORMATION SECURITY</li>
+        <ul>
+            <li>DEFINITION</li>
+            <li>NEED FOR SECURITY</li>
+            <li>INFOSEC ELEMENTS</li>
+            <li>CHALLENGES</li>
+            <li>MOTIVATIONS</li>
+            <li>ATTACKS CLASIFICATION</li>
+            <li>ATTACK VECTORS</li>
+            <li>ATTACK TYPES</li>
+            <li>LAWS AND REGULATIONS</li>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">2.ETHICAL HACKING</li>
+        <ul>
+            <li>CIBER KILL CHAIN METHODOLOGY</li>
+            <li>INDICATORS OF COMPROMISE (IOC)</li>
+            <li>HACKING CONCEPTS AND CLASSES</li>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">HACKING PHASES</li>
+            <ul>
+                <li>RECONOCIMIENTO</li>
+                <li>SCANNING</li>
+                <li>GAINING ACCESS</li>
+                <li>MAINTAINING ACCESS</li>
+                <li>CLEARING TRACKS</li>
+            </ul>
+            <li>SCOPE AND LIMITATIONS OF ETHICAL HACKING</li>
+            <li>TOOLS</li>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">3.INFORMATION SECURITY THREADS AND VULNERABILITY ASSESSMENT</li>
+        <ul>
+            <li>THREATS</li>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">MALWARE</li>
+            <ul>
+                <li>INFECTION WITH MALWARE</li>
+                <li>MALWARE DISTRIBUTION</li>
+                <li>COMPONENTS</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">TYPES OF MALWARE</li>
+                <ul>
+                    <li>TROYANOS</li>
+                    <li>VIRUS</li>
+                    <li>RANSOMWARE</li>
+                    <li>WORMS</li>
+                    <li>ROOTKITS</li>
+                    <li>PUAS PUPS (JUNKWARE)</li>
+                    <li>ADWARE</li>
+                    <li>SPYWARE</li>
+                    <li>KEYLOGGERS</li>
+                    <li>BOTNETS</li>
+                    <li>FILELESS MALWARE</li>
+                </ul>
+                <li>CONTRAMEDIDAS</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">VULNERABILIDADES</li>
+            <ul>
+                <li>VULNERABILITY CLASSIFICATION</li>
+                <li>IMPACTO DE LAS VULNERABILIDADES</li>
+                <li>EVALUACIÓN DE VULNERABILIDADES</li>
+                <li>COMMON WEAKNESS</li>
+                <li>TIPOS DE EVALUACIÓN DE VULNERABILIDADES</li>
+            </ul>
+            <li>HERRAMIENTAS</li>
+            <li>EXPLOTACIÓN DE LAS VULNERABILIDADES</li>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">4.PASSWORD CRACKEO, TÉCNICAS Y CONTRAMEDIDAS</li>
+        <ul>
+            <li>CRAQUEO Y COMPLEJIDAD DEL PASSWORD</li>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">PASSWORD ATTACKS TYPES</li>
+            <ul>
+                <li>DICTIONARY ATTACK , BRUTE FORCE , RULE-BASED</li>
+                <li>PASSWORD GUESSING</li>
+                <li>DEFAULT PASSWORDS</li>
+                <li>TROJANS / SPYWARE /KEYLOGGERS</li>
+                <li>HASH INJECTION PtH (PASS THE HASH)</li>
+                <li>LLMNR - NBT-NS POISONING</li>
+                <li>PASS THE TICKET</li>
+                <li>WIRE SNIFFING</li>
+                <li>MiT (MAN IN THE MIDDLE) AND REPLAY ATTACKS</li>
+                <li>RAINBOW TABLE</li>
+            </ul>
+            <li>TOOLS</li>
+            <li>CONTRAMEDIDAS</li>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">5.INGENIERÍA SOCIAL , TÉCNICAS Y CONTRAMEDIDAS</li>
+        <ul>
+            <li>objetivos</li>
+            <li>¿QUE ES LA INGENIERÍA SOCIAL?</li>
+            <li>OBJETIVOS USUALES DE LA INGENIERÍA SOCIAL</li>
+            <li>IMPACTO DE UN ATAQUE DE INGENIERÍA SOCIAL</li>
+            <li>COMPORTAMIENTOS VULNERABLES A ATAQUES DE INGENIERÍA SOCIAL</li>
+            <li>FACTORES QUE HACEN VULNERABLES A LAS COMPAÑÍAS</li>
+            <li>¿PORQUÉ ES EFECTIVA LA INGENIERÍA SOCIAL?</li>
+            <li>FASES DE UN ATAQUE DE INGENIERÍA SOCIAL</li>
+            <li>TÉCNICAS DE INGENIERÍA SOCIAL</li>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">TIPOS DE INGENIERÍA SOCIAL</li>
+            <ul>
+                <li>HUMANA</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">POR COMPUTADORA</li>
+                <ul>
+                    <li>TIPOS DE PHISHING</li>
+                    <li>PHISHING TOOLS</li>
+                </ul>
+                <li>POR MOBIL</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">AMENAZAS INTERIORES ATAQUES DESDE DENTRO</li>
+            <ul>
+                <li>TIPOS DE AMENAZAS INTERNAS</li>
+                <li>EFECTIVIDAD DE LOS ATAQUES INTERNOS</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">SUPLANTACIÓN DE IDENTIDAD</li>
+            <ul>
+                <li>TIPOS DE SUPLANTACIÓN DE IDENTIDAD</li>
+            </ul>
+            <li>CONTRAMEDIDAS</li>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">6. ATAQUES A NIVEL DE RED Y CONTRAMEDIDAS</li>
+        <ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">SNIFFING</li>
+            <ul>
+                <li>PASIVO</li>
+                <li>ACTIVO</li>
+                <li>PROTOCOLOS VULNERABLES A SNIFFING</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">SNIFFING TÉCNICAS</li>
+                <ul>
+                    <li>MAC FLOODING</li>
+                    <li>DHCP Starvation</li>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">ARP Spoofing</li>
+                    <ul>
+                        <li>ARP TOOLS</li>
+                    </ul>
+                    <li>MAC SPOOFING/DUPLICATION</li>
+                    <li>DNS POISONING</li>
+                    <li>SNIFFING TOOLS</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">SNIFFING CONTRAMEDIDAS</li>
+                <ul>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">Tecnicas de deteccion</li>
+                    <ul>
+                        <li>Método PING</li>
+                        <li>DNS</li>
+                    </ul>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">DDOS</li>
+            <ul>
+                <li>¿Qué es un ataque DDOS?</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">TIPOS</li>
+                <ul>
+                    <li>UDP FLOOD</li>
+                    <li>ICMP FLOOD</li>
+                    <li>PING OF DEATH</li>
+                    <li>SMURF ATTACK</li>
+                    <li>SYN ATTACK</li>
+                    <li>FRAGMENTATION ATTACK</li>
+                    <li>ATAQUES MULTI VECTOR</li>
+                    <li>Peer-to-Peer ATTACK</li>
+                    <li>PERMANENT DOS/DDOS</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">DDOS TOOLS</li>
+                <ul>
+                    <li>hping3</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">DDOS CONTRAMEDIDAS</li>
+                <ul>
+                    <li>DDOS PROTECTION TOOLS</li>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">SESSION HIJACKING</li>
+            <ul>
+                <li>PROCESO</li>
+                <li>TIPOS DE SECUESTRO DE SESIONES</li>
+                <li>SPOOFING vs. HIJACKING</li>
+                <li>TOOLS</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">CONTRAMEDIDAS</li>
+                <ul>
+                    <li>DETECCIÓN TOOLS</li>
+                </ul>
+            </ul>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">7. ATAQUES A APLICACIONES WEB Y CONTRAMEDIDAS</li>
+        <ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">SERVIDORES WEB Y CONCEPTOS</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">SERVIDORES WEB</li>
+                <ul>
+                    <li>COMPONENTES DE UN WEB SERVER</li>
+                </ul>
+                <li>INCIDENTES DE SEGURIDAD</li>
+                <li>IMPACTO DE LOS ATAQUES A SERVIDORES WEB</li>
+                <li>¿POR QUÉ SE VEN COMPROMETIDOS LOS SERVIDORES WEB?</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">TIPOS DE ATAQUES A SERVIDORES WEB</li>
+                <ul>
+                    <li>SECUESTRO DE SERVIDOR DNS</li>
+                    <li>AMPLIFICACIÓN DE DNS</li>
+                    <li>DIRECTORY TRAVERSAL ATTACKS</li>
+                    <li>WEBSITE DEFACING</li>
+                    <li>ATAQUES A SERVIDORES WEB MAL CONFIGURADOS</li>
+                    <li>RESPONSE-Splitting Attack</li>
+                    <li>WEB CACHE POISONING</li>
+                    <li>SSH Brute-force attack</li>
+                    <li>CRACKEO DE PASSWORDS DE SERVERS</li>
+                    <li>SERVER-SIDE REQUEST FORGERY (SSRF)</li>
+                    <li>TOOLS</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">CONTRAMEDIDAS</li>
+                <ul>
+                    <li>TOOLS</li>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">APLICACIONES WEB</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">ARQUITECTURA DE LAS APLICACIONES</li>
+                <ul>
+                    <li>SERVICIOS WEB</li>
+                    <li>STACK DE VULNERABILIDADES</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">APLICACIONES WEB AMENAZAS Y ATAQUES</li>
+                <ul>
+                    <li>INYECCIÓN</li>
+                    <li>BROKEN AUTHENTICATION</li>
+                    <li>SENSITIVE DATA EXPOSURE</li>
+                    <li>XML Extrenal Entity (XXE)</li>
+                    <li>BROKEN ACCESS CONTROL</li>
+                    <li>SECURITY MISCONFIGURATION</li>
+                    <li>CROSS-SITE SCRIPTING</li>
+                    <li>INSECURE DESERIALIZATION</li>
+                    <li>COMPONENTS WITH KNOWN VULNERABILITIES</li>
+                    <li>INSUFICIENTE LOGGIN Y MONITORIZACIÓN</li>
+                </ul>
+                <li>TOOLS</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">APLICACIONES WEB CONTRAMEDIDAS</li>
+                <ul>
+                    <li>TOOLS</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">SQL INJECTION ATTACKS</li>
+                <ul>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">TIPOS</li>
+                    <ul>
+                        <li>IN BAND INJECTION (same channel)</li>
+                        <li>ERROR BASED INJECTION</li>
+                        <li>UNION INJECTION</li>
+                        <!-- next item is node -->
+                        <li class="node" onclick="placeholder(this)">BLIND/INFERENTIAL INJECTION</li>
+                        <ul>
+                            <li>BOOLEAN EXPLOITATION</li>
+                        </ul>
+                        <li>OUT OF BAND SQL INJECTION</li>
+                    </ul>
+                    <li>TOOLS</li>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">CONTRAMEDIDAS</li>
+                    <ul>
+                        <li>TOOLS</li>
+                    </ul>
+                </ul>
+            </ul>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">8. WIRELESS ATTACKS</li>
+        <ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">TERMINOLOGY</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">WIRELESS NETWORKS</li>
+                <ul>
+                    <li>TYPES OF WIRELESS NETWORKS</li>
+                    <li>WIRELESS STANDARDS</li>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">TYPES OF WIRELESS ENCRYPTION</li>
+            <ul>
+                <li>WPA2</li>
+                <li>WEP</li>
+                <li>WPA</li>
+                <li>WPA2</li>
+                <li>WPA3</li>
+                <li>COMPARATION</li>
+            </ul>
+            <li>WIRELESS NETWORKS SPECIFIC ATTACKS</li>
+            <li>ROGUE ACCESS POINT ATTACK</li>
+            <li>MISCONFIGURED ACCESS POINT ATTACK</li>
+            <li>UNAUTHORIZED ASSOCIATION</li>
+            <li>AD-HOC CONNECTION</li>
+            <li>HONEYPOT ACCESS POINT ATTACK</li>
+            <li>AP MAC SPOOFING</li>
+            <li>KEY REINSTALLATION ATTACK (WPA2)</li>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">JAMMING SIGNAL ATTACK</li>
+            <ul>
+                <li>JAMMING DEVICES</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">TOOLS</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">AIRCRACK-NG</li>
+                <ul>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">WEP</li>
+                    <ul>
+                        <li>ACCESS POINT SUPPLANTATION</li>
+                        <li>PACKET INJECTION</li>
+                    </ul>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">WPA</li>
+                    <ul>
+                        <li>CLIENT DEAUTHORIZATION OR ACCESS POINT SUPPLANTATION</li>
+                    </ul>
+                </ul>
+                <li>OTHER TOOLS</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">BLUETOOTH ATTACKS</li>
+            <ul>
+                <li>MODES</li>
+                <li>BLUETOOTH HACKING</li>
+                <li>BLUETOOTH THREADS</li>
+                <li>TOOLS</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">COUNTERMEASURES</li>
+            <ul>
+                <li>BLUETOOTH SECURITY TOOLS</li>
+            </ul>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">9 - MOBILE ATTACKS AND COUNTERMEASURES</li>
+        <ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">MOBILE ATTACK ANATOMY</li>
+            <ul>
+                <li>TOP 10 MOBILE RISK</li>
+                <li>PROFITS</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">ATTACK VECTORS AND VULNERABILITIES</li>
+            <ul>
+                <li>VECTORS</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">RISKS</li>
+                <ul>
+                    <li>RISKS FROM APP STORES</li>
+                    <li>SANDBOXING RISKS</li>
+                    <li>MOBILE SPAM</li>
+                    <li>SMISHISING (SMS PHISING)</li>
+                    <li>SS7 VULNERABILITY</li>
+                    <li>SIMJACKING</li>
+                    <li>USING METASPLOIT</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">TOOLS</li>
+                <ul>
+                    <li>ANDROID</li>
+                    <li>iOS</li>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">MOBILE DEVICE MANAGEMENT</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">BYOD BRING YOUR OWN DEVICE</li>
+                <ul>
+                    <li>RISKS</li>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">COUNTERMEASURES</li>
+            <ul>
+                <li>TOP 10 OWASP CONTROLS</li>
+                <li>MOBILE PLATFORM SECURITY GUIDELINES</li>
+                <li>TOOLS</li>
+            </ul>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">10 - IOT & OT ATTACKS</li>
+        <ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">IOT (INTERNET OF THINGS , IOE (INTERNET OF EVERYTHING))</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">CONCEPTS</li>
+                <ul>
+                    <li>ARCHITECTURE</li>
+                    <li>AREAS AND DEVICES</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">THREADS & ATTACKS</li>
+                <ul>
+                    <li>CHALLENGES</li>
+                    <li>SECURITY PROBLEMS</li>
+                    <li>OWASP TOP 10 IoT THREADS</li>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">TYPES OF ATTACKS</li>
+                    <ul>
+                        <li>IoT HACKING</li>
+                        <li>DDoS ATTACK</li>
+                        <li>ROLLING CODE ATTACK</li>
+                        <li>BLUEBORNE ATTACK</li>
+                        <li>JAMMING ATTACK</li>
+                        <li>SMART GRID / INDUSTRIAL DEVICES:</li>
+                        <li>SDR-BASED ATTACKS ON IoT</li>
+                        <li>FAULT INJECTION ATTACKS</li>
+                    </ul>
+                    <li>CAPTURE AND ANALYSIS OF IoT TRAFFIC WITH WIRESHARK</li>
+                    <li>IoT TOOLS</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">COUNTERMEASURES</li>
+                <ul>
+                    <li>TOOLS</li>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">OT ATTACKS</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">CONCEPTS</li>
+                <ul>
+                    <li>TERMINOLOGY</li>
+                    <li>PURDUE MODEL</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">THREADS AND ATTACKS</li>
+                <ul>
+                    <li>CHALLENGES</li>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">THREADS</li>
+                    <ul>
+                        <li>HMI ATTACKS</li>
+                        <li>SIDE-CHANNEL ATTACKS</li>
+                        <li>PLC -ATTACKS</li>
+                        <li>HACKING THROUGH RF REMOTE CONTROLLERS</li>
+                    </ul>
+                    <li>TOOLS</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">COUNTERMEASURES</li>
+                <ul>
+                    <li>TOOLS</li>
+                </ul>
+            </ul>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">11- CLOUD COMPUTING THREADS AND COUNTERMEASURES</li>
+        <ul>
+            <li>CONCEPTS</li>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">TYPES OF CLOUD COMPUTING SERVICES</li>
+            <ul>
+                <li>RESPONSIBILITIES IN THE CLOUD</li>
+                <li>CLOUD DEPLOYMENT MODELS</li>
+                <li>NIST CLOUD DEPLOYMENT REFERENCE ARCHITECTURE</li>
+                <li>CLOUD STORAGE ARCHITECTURE</li>
+                <li>CLOUD SERVICE PROVIDERS</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">CONTAINER TECHNOLOGY</li>
+            <ul>
+                <li>CONTAINER VS. VIRTUAL MACHINE</li>
+                <li>DOCKER</li>
+                <li>KUBERNETES</li>
+                <li>KUBERNETES VS DOCKER</li>
+                <li>CONTAINERS SECURITY CHALLENGES</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">CONTAINER MANAGEMENT PLATFORMS</li>
+                <ul>
+                    <li>KUBERNETES PLATFORMS</li>
+                </ul>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">CLOUD COMPUTING THREADS</li>
+            <ul>
+                <li>OWASP TOP 10 CLOUD COMPUTING THREADS</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">TYPES OF THREADS</li>
+                <ul>
+                    <li>SIDE CHANNEL ATTACKS CROSS GUEST VM BREACHES</li>
+                    <li>WRAPPING ATTACKS</li>
+                    <li>MANI IN THE CLOUD (MITC) ATTACK</li>
+                    <li>CLOUD HOPPER ATTACK</li>
+                    <li>CLOUD CRYPTOJACKING</li>
+                    <li>CLOUDBORNE ATTACK</li>
+                </ul>
+                <li>TOOLS</li>
+            </ul>
+            <!-- next item is node -->
+            <li class="node" onclick="placeholder(this)">CLOUD COMPUTING COUNTERMEASURES</li>
+            <ul>
+                <li>CLOUD SECURITY TOOLS</li>
+            </ul>
+        </ul>
+        <!-- next item is node -->
+        <li class="node" onclick="placeholder(this)">12- PENETRATION TESTING</li>
+            <ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">FUNDAMENTALS OF PENTESTING</li>
+                <ul>
+                    <li>WHAT IS PENTESTING</li>
+                </ul>
+                <li>BENEFITS OF PENTESTING</li>
+                <li>SECURITY AUDIT, VULNERABILITY ASSESMENT, PENETRATION TESTING</li>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">ASSESSMENT TYPES</li>
+                <ul>
+                    <li>GOAL ORIENTED</li>
+                    <li>COMPLIANCE ORIENTED</li>
+                    <li>RED TEAM ORIENTED</li>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">STRATEGIES AND PHASES</li>
+                <ul>
+                    <li>STRATEGIES</li>
+                    <li>PROCESS</li>
+                    <li>PHASES</li>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">METODOLOGIES</li>
+                    <ul>
+                        <li>PROPIETARY</li>
+                        <li>OPEN-SOURCE</li>
+                    </ul>
+                </ul>
+                <!-- next item is node -->
+                <li class="node" onclick="placeholder(this)">GUIDELINES AND RECOMMENDATIONS</li>
+                <ul>
+                    <li>CHARACTERISTICS OF A GOOD PENTEST</li>
+                    <li>WHEN TO PERFORM A PENTEST</li>
+                    <li>ETHICS OF A PENTESTER</li>
+                    <li>EVOLVE AS PENTESTER</li>
+                    <li>QUALIFICATIONS, EXPERIENCE, CERTIFICATIONS AND SKILLS OF A PENTESTER</li>
+                    <li>COMMUNICATIONS SKILLS</li>
+                    <li>PROFILE OF A GOOD PENTESTER</li>
+                    <li>RESPONSIBILITIES OF A PENTESTER</li>
+                    <!-- next item is node -->
+                    <li class="node" onclick="placeholder(this)">RISK ASSOCIATED WITH PENTESTING</li>
+                    <ul>
+                        <li>TYPES OF RISKS</li>
+                        <li>ADDRESSING RISKS</li>
+                    </ul><!-- level left -->
+                </ul><!-- level left -->
+            <!-- level left -->
+            </ul><!-- level left -->
+</ul><!-- level left -->
+
+    
+    
+</menu>
+      <script>
+        function placeholder(element){
+            console.log(element.nextElementSibling)
+            element.nextElementSibling.classList.toggle('red')
+            element.classList.toggle('active')
+            element.classList.toggle("caret-down");
+            
+        }
+      </script>
+<!--excerpt.end-->    
+</body>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {%- include head.html -%}
+
+  <body>
+    
+    {%- include header.html -%}
+    
+    <main class="page-content" aria-label="Content" style='' >
+      {%- include back_button.html -%}
+      <div class="wrapper">
+        {{ content }}
+        {%- include fullScreen.html -%}
+      </div>
+      <div class="logo_wrapper">
+        {%- include initials_2.svg -%}
+        
+      </div>
+        
+    </main>
+
+    {%- include footer.html -%}
+
+  </body>
+
+</html>

@@ -1,0 +1,325 @@
+---
+permalink: /pages/404.html
+layout: default
+---
+
+<style type="text/css" media="screen">
+  .container {
+    margin: 10px auto;
+    max-width: 600px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 30px 0;
+    font-size: 4em;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .canvas1 {
+    position: relative;
+    border: 2px solid red;
+  }
+
+  .container {
+    height: 60vh;
+  }
+
+  #svg_404 .outer path {
+    stroke: var(--bg);
+    stroke-linecap: round;
+    stroke-width: 0.1;
+    transform: scaleX(-1);
+    animation: four04_reveal_outer 1.5s ease-in forwards;
+  }
+
+  #svg_404 .inner path {
+    stroke: var(--text);
+    stroke-linecap: round;
+    stroke-width: 0.1;
+    transform: scaleY(0);
+    animation: four04_reveal_inner 1s ease-in forwards;
+  }
+
+  #svg_404 .powerl path {
+    transform: translateY(500px);
+    stroke: #ffffff6b;
+    opacity: 0;
+    stroke-linecap: round;
+    stroke-width: 1.1;
+    fill: var(--text);
+    animation: four04_reveal_powerl 2s ease-out forwards;
+
+  }
+
+  @keyframes four04_reveal_inner {
+    to {
+      transform: scaleY(1);
+      stroke-width: 0.5;
+      stroke: var(--bg);
+    }
+  }
+
+  @keyframes four04_reveal_outer {
+    to {
+      transform: scaleX(1);
+      stroke-width: 1;
+      stroke: var(--accent);
+    }
+  }
+
+  @keyframes four04_reveal_powerl {
+    to {
+      transform: scaleX(1);
+      stroke-width: 1.5;
+      stroke: var(--bg);
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes four04_reveal_msg {
+    to {
+      /* transform:translate(0,0); */
+      opacity: 1;
+      color: var(--accent);
+      filter: drop-shadow(2px 4px 5px var(--shadow));
+    }
+  }
+
+  .msg_404 {
+    border: 2px solid var(--accent);
+    border-radius: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    padding: 1rem;
+    background: var(--bg);
+    /* transform: translate(1000px,100px); */
+    opacity: 0;
+    animation: four04_reveal_msg 1s ease-out forwards;
+    animation-delay: 1s;
+  }
+</style>
+<!-- <canvas id="canvas1" class="canvas1"> </canvas> -->
+<span id="anchor404"></span><br><br><br>
+<div id="container404" class="container">
+  <!-- <h1>404</h1> -->
+
+  <svg id="svg_404" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 10">
+    <g class="powerl" stroke="green" fill="white" stroke-width="5">
+      <path d=" M 2 1 L 2 4 C 2 4 2 5 3 5 C 4 5 5 5 6 5" stroke="#000000" stroke-width="4" fill="red" />
+      <path d=" M 5 1 L 5 9 " stroke="#000000" stroke-width="4" fill="red" />
+      <path d=" M 10 2 L 9 2 C 8 2 8 3 8 3 L 8 7 C 8 7 8 8 9 8 L 11 8 C 12 8 12 7 12 7 L 12 3 C 12 3 12 2 11 2 L 10 2 ""
+          stroke=" #000000" stroke-width="4" fill="red" />
+      <path d=" M 11 1 L 9 9" stroke="#000000" stroke-width="4" fill="red" />
+      <path d=" M 14 1 L 14 4 C 14 4 14 5 15 5 L 18 5 " stroke="#000000" stroke-width="4" fill="red" />
+      <path d=" M 17 1 L 17 9" stroke="#000000" stroke-width="4" fill="red" />
+    </g>
+
+    <g class="outer" stroke="green" fill="white" stroke-width="5">
+      <path d=" M 2 1 L 2 4 C 2 4 2 5 3 5 C 4 5 5 5 6 5" stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 5 1 L 5 9 " stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 10 2 L 9 2 C 8 2 8 3 8 3 L 8 7 C 8 7 8 8 9 8 L 11 8 C 12 8 12 7 12 7 L 12 3 C 12 3 12 2 11 2 L 10 2 ""
+            stroke=" #000000" stroke-width="0.1" fill="none" />
+      <path d=" M 11 1 L 9 9" stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 14 1 L 14 4 C 14 4 14 5 15 5 L 18 5 " stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 17 1 L 17 9" stroke="#000000" stroke-width="0.1" fill="none" />
+    </g>
+    <g class="inner" stroke="green" fill="white" stroke-width="5">
+      <path d=" M 2 1 L 2 4 C 2 4 2 5 3 5 C 4 5 5 5 6 5" stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 5 1 L 5 9 " stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 10 2 L 9 2 C 8 2 8 3 8 3 L 8 7 C 8 7 8 8 9 8 L 11 8 C 12 8 12 7 12 7 L 12 3 C 12 3 12 2 11 2 L 10 2 ""
+          stroke=" #000000" stroke-width="0.1" fill="none" />
+      <path d=" M 11 1 L 9 9" stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 14 1 L 14 4 C 14 4 14 5 15 5 L 18 5 " stroke="#000000" stroke-width="0.1" fill="none" />
+      <path d=" M 17 1 L 17 9" stroke="#000000" stroke-width="0.1" fill="none" />
+    </g>
+
+
+  </svg>
+
+
+  <div class="msg_404">
+    <p><strong>Page not found :(</strong></p>
+    <p>The requested page could not be found.</p>
+  </div>
+</div>
+<script>
+  window.addEventListener('load', (event) => {
+    console.log('page is fully loaded');
+    seMulti('page-content');
+  });
+  function scrollTo(hash) {
+    location.hash = "#" + hash;
+  }
+
+  scrollTo('anchor404');
+</script>
+<!--
+  <script>
+  
+  let parent = document.getElementsByClassName("wrapper")[0];
+  const canvas = document.getElementById('canvas1');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth/2;
+  canvas.height = window.innerHeight/2;
+  //canvas.width = window.innerWidth;
+  //canvas.height = window.innerHeight;
+  let particleArray = [];
+  let adjustX = canvas.width / 1500;
+  let adjustY = canvas.height / 1500;
+  
+  let color = getComputedStyle(document.documentElement).getPropertyValue('--bg');
+  let dark_color = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+  
+  // Get mouse position
+  let mouse = {
+      x: null,
+      y: null,
+      radius: 150 //(canvas.height/80) * (canvas.width/80)
+  }
+  window.addEventListener("pointermove", function (e) {
+      let bounds = parent.getBoundingClientRect();
+      mouse.x = e.clientX - bounds.left;
+      mouse.y = e.clientY - bounds.top;
+  
+      console.log(x, y);
+  });
+  
+  /* window.addEventListener('pointermove', function(event) {
+      mouse.x = event.x;
+      mouse.y = event.y;
+  });
+   */
+  
+  
+  let font_size = canvas.width / 100 + 15;
+  ctx.fillStyle = 'white';
+  ctx.font = font_size + 'px Arial';
+  ctx.fillText('404', 2, 20);
+  
+  const coordinates = ctx.getImageData(0, 0, canvas.width / 2, canvas.height / 2);
+  
+  class Particle {
+      constructor(x, y) {
+          this.x = x; //= x + 100;
+          this.y = y;
+          this.size = 3;
+          this.baseX = this.x;
+          this.baseY = this.y;
+          this.density = (Math.random() * 30);
+          this.color = dark_color //'#' + (Math.floor(Math.random()*16777215).toString(16));
+      }
+      draw() {
+          ctx.fillStyle = this.color; //ctx.fillStyle = '#' + (Math.floor(Math.random()*16777215).toString(16));
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.closePath();
+          //ctx.fill();
+      }
+      update() {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          let forceDirectionX = dx / distance;
+          let forceDirectionY = dy / distance;
+          let maxDistance = mouse.radius;
+          let force = (maxDistance - distance) / maxDistance;
+          let directionX = forceDirectionX * force * this.density;
+          let directionY = forceDirectionY * force * this.density;
+          if (distance < mouse.radius) {
+              this.x -= directionX;
+              this.y -= directionY;
+          } else {
+              if (this.x !== this.baseX) {
+                  let dx = this.x - this.baseX;
+                  this.x -= dx / 50;
+              }
+              if (this.y !== this.baseY) {
+                  let dy = this.y - this.baseY;
+                  this.y -= dy / 50;
+              }
+  
+          }
+      }
+  }
+  function init() {
+      particleArray = [];
+      
+      for (let y = 0, y2 = coordinates.height; y < y2; y++) {
+          for (let x = 0, x2 = coordinates.width; x < x2; x++) {
+              if (coordinates.data[(y * 4 * coordinates.width) + (x * 4) + 3] > 128) {
+                  let positionX = x + adjustX;
+                  let positionY = y + adjustY;
+                  particleArray.push(new Particle(positionX * 10, positionY * 10));
+              }
+          }
+      }
+  }
+  
+  
+  function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particleArray.length; i++) {
+          particleArray[i].draw();
+          particleArray[i].update();
+      }
+      requestAnimationFrame(animate);
+      connect();
+  }
+  
+  function go(){
+      color = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+      dark_color = getComputedStyle(document.documentElement).getPropertyValue('--bg');
+      init();
+      animate();
+  
+  }
+  
+  go();
+  
+  function connect() {
+      let rgbc = "140, 85, 31,";
+      let opacityValue = 1;
+      //let lineColor = 'rgba(140, 85, 31,'+ opacityValue + ')';
+      for (let a = 0; a < particleArray.length; a++) {
+          for (let b = a; b < particleArray.length; b++) {
+              let distance = ((particleArray[a].x - particleArray[b].x) * (particleArray[a].x - particleArray[b].x)) +
+                  ((particleArray[a].y - particleArray[b].y) * (particleArray[a].y - particleArray[b].y));
+              if (distance < 600) {
+                  opacityValue = 1 - (distance / 20000 * 2);
+                  let lineColor = 'rgba(' + rgbc + opacityValue + ')';
+  
+                  ctx.strokeStyle = color;
+  
+                  ctx.lineWidth = 1;
+                  ctx.beginPath();
+                  ctx.moveTo(particleArray[a].x, particleArray[a].y);
+                  ctx.lineTo(particleArray[b].x, particleArray[b].y);
+                  ctx.stroke();
+              }
+          }
+      }
+  }
+  // Resize event
+  window.addEventListener('resize',
+      function() {
+          canvas.width = innerWidth;
+          canvas.height = innerHeight;
+          mouse.radius = ((canvas.width / 80) * (canvas.height / 80));
+          init();
+      })
+  window.addEventListener('pointerout',
+      function() {
+          mouse.x = undefined;
+          mouse.y = undefined;
+      })
+  // remove mouse position periodically
+  setInterval(function() {
+      mouse.x = undefined;
+      mouse.y = undefined;
+  }, 1000)
+  
+  </script>
+-->
