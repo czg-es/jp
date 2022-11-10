@@ -41,6 +41,9 @@ There are some posts migrated from a previous blog written in spanish, but from 
         filter: drop-shadow(2px 4px 5px var(--shadow));
         color: var(--text);
     }
+    .back_button{
+        display:none;
+    }
 /* COLOR CHANGE WIDGET----------------------------------------------------------------------------------------------- */
     .controls{
         padding: 1rem;
