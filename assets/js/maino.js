@@ -53,6 +53,13 @@ if (!currentSettings) {
     setBg(current_bg)
     setAccent(current_accent)
     setTextColor(current_textColor)
+    /*
+    window.name = [
+        getComputedStyle(document.documentElement).getPropertyValue('--bg'),
+        getComputedStyle(document.documentElement).getPropertyValue('--accent'),
+        getComputedStyle(document.documentElement).getPropertyValue('--text'),
+        current_mode]
+        */
 }
 
 /* setter funcs for dom elements ------------------------------------------------------------------------------------------------------ */
@@ -98,7 +105,8 @@ function refresh() {
     //console.log('--------------------------');
     //console.log(current_mode);
     //console.log('----------------');
-        window.name = ",,," + current_mode;
+        //window.name = ",,," + current_mode;
+        window.name = ['','','', current_mode];
     //window.name = [bg, accent, text, current_mode]
     window.location.reload();
     //se('hero_wrapper');
