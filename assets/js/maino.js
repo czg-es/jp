@@ -81,6 +81,7 @@ if (!currentSettings) {
     /* FAIL SAFE no action*/
     if(window.name.split(',')[0] == 'night'){
      console.log('IT HAPPENED');
+     setBg();
      
     }
 
