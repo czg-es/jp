@@ -99,7 +99,7 @@ function refresh() {
     //console.log(current_mode);
     //console.log('----------------');
         //window.name = ",,," + current_mode;
-    window.name = [bg, accent, color, current_mode]
+    window.name = [bg, accent, text, current_mode]
     window.location.reload();
     //se('hero_wrapper');
 }
