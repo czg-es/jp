@@ -77,6 +77,13 @@ if (!currentSettings) {
     console.log(' other time RESULTING: ')
     console.log (window.name)
     console.log(currentSettings)
+    
+    /* FAIL SAFE*/
+    if(window.name.split(',')[0] == 'night'){
+     console.log('IT HAPPENED');
+     refresh();
+    }
+
 }
 
 /* setter funcs for dom elements ------------------------------------------------------------------------------------------------------ */
@@ -422,8 +429,3 @@ window.onscroll = function() {
 
 window.setTimeout(function () {invert(); invert(); }, 200);
 window.name = currentSettings;
-/* FAIL SAFE*/
-if(window.name.split(',')[0] == 'night'){
- console.log('IT HAPPENED');
- refresh();
-}
