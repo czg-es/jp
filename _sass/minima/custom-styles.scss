@@ -764,3 +764,9 @@ code {
     background-color: var(--accent);
 
 }
+/*links on phone portrait*/
+@media (max-width: 400px), (orientation: portrait){
+    .footer-col{
+        width:60vw;
+    }
+}
