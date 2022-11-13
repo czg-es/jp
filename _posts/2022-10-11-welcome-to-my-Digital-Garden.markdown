@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Welcome to my digital garden!"
-date:   2022-11-01 14:00:40 +0200
+date:   2022-11-13 14:00:40 +0200
 categories: misc
 ---
 
