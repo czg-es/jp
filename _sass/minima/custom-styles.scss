@@ -770,3 +770,8 @@ code {
         width:60vw;
     }
 }
+@media (orientation: portrait){
+    .hero > svg{
+        width:90vw;
+    }
+}
