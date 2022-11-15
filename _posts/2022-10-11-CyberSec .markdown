@@ -93,8 +93,8 @@ Since this its done in a while loop , it´ll happen as many times as necesary to
 This means that it could handle level jumps, However, this could generate empty levels wich is a problem for this particular use case( html elements).
 
 The most beautiful part happens in the beggining, in the try clause we take a "peek into the future" checking if the next line has a higher or lower level.
-This is because I wanted to be able to unfold the sections, so every "node" gets asigned function that will take care of the visibility of its child.(this is the part where having empty levels could mess the operation)
-if the try clause fails the next level is asigned as 0, because, when is it going to fail to look one line ahead? yeah, you guessed it, in the last position of the list.
+This is because I wanted to be able to unfold the sections, so every "node" gets asigned function that will take care of the visibility of its child.(this is the part where having empty levels could mess the operation)<br>
+If the try clause fails the next level is asigned as 0, because, when is it going to fail to look one line ahead? yeah, you guessed it, in the last position of the list.
 
 So, wouldn't it be nice to develop such a thing? the answer is : Yes totally !!
 
