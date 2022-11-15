@@ -4,7 +4,7 @@ title:  "Cybersec Schema"
 date:   2022-11-01 13:00:40 +0200
 categories: cybersec
 ---
-I recently took the ech cyber security essentials course, noticed how neatly organized and structured the contents were.
+I recently took the <a href="https://www.eccouncil.org/">EC-Council</a> cyber security essentials course, noticed how neatly organized and structured the contents were.
 
 while taking notes I though: wouldn't it be nice to have some program that feeds from an indented list (like the table of contents from my notes) and generate an structure of nested DOM elelments to represent in a web page an navigate into the diferent levels?
 
